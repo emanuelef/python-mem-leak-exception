@@ -99,18 +99,60 @@ This repository includes:
 4. Creating fresh exception instances solves the problem with negligible performance impact
 5. This leak can be particularly problematic in long-running server applications
 
+## Traceback Accumulation Demo
+
+`traceback_accumulation_demo.py` demonstrates how reusing a single exception object causes its traceback to accumulate after multiple raises, leading to memory growth. It compares this with the factory pattern, where a fresh exception is created each time, preventing accumulation.
+
+### How it works
+- The script raises a singleton exception 1000 times in a loop, each time with a large local variable to inflate memory usage.
+- It prints the traceback frame count and memory usage every 100 raises.
+- Then, it repeats the process using a fresh exception object each time.
+
+### Sample Output
+```console
+$ python traceback_accumulation_demo.py
+Raise #1: Traceback frame count = 2, Memory usage = 14592 KB
+Raise #101: Traceback frame count = 202, Memory usage = 15424 KB
+Raise #201: Traceback frame count = 402, Memory usage = 16256 KB
+Raise #301: Traceback frame count = 602, Memory usage = 17136 KB
+Raise #401: Traceback frame count = 802, Memory usage = 18000 KB
+Raise #501: Traceback frame count = 1002, Memory usage = 18848 KB
+Raise #601: Traceback frame count = 1202, Memory usage = 19664 KB
+Raise #701: Traceback frame count = 1402, Memory usage = 20416 KB
+Raise #801: Traceback frame count = 1602, Memory usage = 21248 KB
+Raise #901: Traceback frame count = 1802, Memory usage = 22080 KB
+Raise #1000: Traceback frame count = 2000, Memory usage = 22912 KB
+
+Now repeating with a fresh exception each time (factory pattern):
+
+Raise #1: Traceback frame count = 2, Memory usage = 22928 KB
+Raise #101: Traceback frame count = 2, Memory usage = 22928 KB
+Raise #201: Traceback frame count = 2, Memory usage = 22928 KB
+Raise #301: Traceback frame count = 2, Memory usage = 22928 KB
+Raise #401: Traceback frame count = 2, Memory usage = 22928 KB
+Raise #501: Traceback frame count = 2, Memory usage = 22928 KB
+Raise #601: Traceback frame count = 2, Memory usage = 22928 KB
+Raise #701: Traceback frame count = 2, Memory usage = 22928 KB
+Raise #801: Traceback frame count = 2, Memory usage = 22928 KB
+Raise #901: Traceback frame count = 2, Memory usage = 22928 KB
+Raise #1000: Traceback frame count = 2, Memory usage = 22928 KB
+
+Notice how the traceback frame count and memory usage do NOT accumulate when using a fresh exception each time.
+```
+
+### Takeaway
+- **Singleton Exception**: Traceback frames accumulate with each raise (from 2 to 2000 frames), causing memory usage to increase by ~8 MB.
+- **Factory Exception**: Traceback frame count remains constant (2 frames) and memory usage remains stable.
 
 ## Test Results
 
-
-
 Running the comprehensive demo shows a clear difference between the two approaches:
 
-DEMO 1: Singleton Exception Pattern (BAD)
-================================================================================
+```console
+# DEMO 1: Singleton Exception Pattern (BAD)
+
 This demo will raise and catch the SAME exception object 1000 times
 Each exception will capture a context of ~500KB in its traceback
-================================================================================
 Created context object of ~4.1KB
 Starting memory usage: 109.59 MB
 Iteration 1/1000: Memory usage = 109.59 MB (+0.00 B)
@@ -130,14 +172,11 @@ Memory growth trend: 8.543 MB/s
 Total memory increase: 1.44 MB
 ```
 
-```
-================================================================================
-DEMO 2: Factory Exception Pattern (GOOD)
-================================================================================
+```console
+# DEMO 2: Factory Exception Pattern (GOOD)
+
 This demo will raise and catch 1000 NEW exception objects
 Each exception will capture a context of ~500KB in its traceback
-
-================================================================================
 Iteration 1/1000: Memory usage = 188.48 MB (+0.00 B)
 Iteration 101/1000: Memory usage = 188.48 MB (+0.00 B)
 Iteration 201/1000: Memory usage = 188.48 MB (+0.00 B)
@@ -165,7 +204,12 @@ The test results clearly demonstrate that the singleton exception pattern causes
 ## Visual Demonstrations
 
 The demos generate several visualization files:
+- `bad_implementation_memory_error.png` - Shows memory growth with singleton exceptions
+- `good_implementation_memory_error.png` - Shows stable memory usage with factory methods
+- `memory_usage_comparison.png` - Side-by-side comparison of both approaches
+- `normalized_memory_comparison.png` - Normalized growth comparison
+- `article_comparison.png` - Comparison chart from the article examples
 
 ## License
 
-MIT License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
