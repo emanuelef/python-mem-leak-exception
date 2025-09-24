@@ -58,6 +58,7 @@ This repository includes:
 6. `visualize_memory.py` - Script for generating comparison visualizations
 7. `demo.py` - Simple demo of the issue with tracemalloc analysis
 8. `article_demo.py` - Comprehensive demo with detailed output for article content
+9. `traceback_accumulation_demo.py` - Shows how reusing exception objects causes traceback accumulation and memory growth
 
 ## Running the Demos
 
@@ -86,6 +87,10 @@ This repository includes:
    python article_demo.py
    ```
 
+6. Run the traceback accumulation demo:
+     ```
+     python traceback_accumulation_demo.py
+     ```
 ## Key Findings
 
 1. Reusing exception objects can cause unbounded memory growth
@@ -94,12 +99,13 @@ This repository includes:
 4. Creating fresh exception instances solves the problem with negligible performance impact
 5. This leak can be particularly problematic in long-running server applications
 
+
 ## Test Results
+
+
 
 Running the comprehensive demo shows a clear difference between the two approaches:
 
-```
-================================================================================
 DEMO 1: Singleton Exception Pattern (BAD)
 ================================================================================
 This demo will raise and catch the SAME exception object 1000 times
@@ -130,9 +136,8 @@ DEMO 2: Factory Exception Pattern (GOOD)
 ================================================================================
 This demo will raise and catch 1000 NEW exception objects
 Each exception will capture a context of ~500KB in its traceback
+
 ================================================================================
-Created context object of ~4.1KB
-Starting memory usage: 188.48 MB
 Iteration 1/1000: Memory usage = 188.48 MB (+0.00 B)
 Iteration 101/1000: Memory usage = 188.48 MB (+0.00 B)
 Iteration 201/1000: Memory usage = 188.48 MB (+0.00 B)
@@ -160,10 +165,6 @@ The test results clearly demonstrate that the singleton exception pattern causes
 ## Visual Demonstrations
 
 The demos generate several visualization files:
-- `bad_implementation_memory_error.png` - Shows memory growth with singleton exceptions
-- `good_implementation_memory_error.png` - Shows stable memory usage with factory methods
-- `memory_usage_comparison.png` - Side-by-side comparison of both approaches
-- `normalized_memory_comparison.png` - Normalized growth comparison
 
 ## License
 
