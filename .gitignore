@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pdb
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.manifest
+*.spec
+*.log
+*.pot
+*.cover
+*.py,cover
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.coveragerc
+*.tox/
+.tox/
+.pytest_cache/
+.pytest_cache/*
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.mo
+*.pot
+*.sqlite3
+*.db
+*.mypy_cache/
+.mypy_cache/
+.dmypy.json
+.dmypy.json
+.pyre/
+.pyre/
+# Jupyter Notebook
+.ipynb_checkpoints
+# VS Code
+.vscode/
+# macOS
+.DS_Store
