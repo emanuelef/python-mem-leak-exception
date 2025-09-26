@@ -1,7 +1,16 @@
-# The Hidden Memory Leak in Python Exception Handling
-# ⚠️ **Note:** Most of this repository consists of experiments and alternative approaches to demonstrate Python exception memory leaks. If you want a single, clear way to observe the issue, run `traceback_accumulation_demo.py`.
+
+# How reusing exception objects can affect Python memory
 
 This repository contains a comprehensive demonstration of a subtle but significant memory leak pattern in Python applications that reuse exception objects. The code examples and visualizations help developers understand the issue and how to properly fix it.
+
+## Quick start: see the issue instantly
+If you want the simplest, most direct way to observe the exception memory leak, run:
+
+```bash
+python traceback_accumulation_demo.py
+```
+
+See the [Traceback Accumulation Demo](#traceback-accumulation-demo) section below for details and sample output.
 
 ## Understanding the Problem
 
